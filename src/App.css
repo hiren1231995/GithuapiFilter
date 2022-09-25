@@ -1,0 +1,25 @@
+.App{
+  width: 80%;
+  margin: auto;
+}
+.table{
+  border: 1px solid grey;
+}
+.mt-4{
+  margin-top: 2rem;
+}
+.searchbar-form{
+  width: 280px;
+}
+.custom-input-group__prefix{
+  position:absolute;
+  right: 10px;
+  top: 10px;
+}
+.custom-input-group__prefix{
+
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+p{margin-bottom: 0px;}

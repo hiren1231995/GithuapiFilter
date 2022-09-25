@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import SearchBar from "./Common/SearchBar";
 import TableComponent from "./Common/TableComponent";
@@ -12,16 +12,33 @@ const Repo = () => {
   const [search, setSearch] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  //api call for repos user wise
+  const users = useCallback(() => {
+    setLoading(true);
+    const url = `/users/${id}/repos`;
+    api
+      .get(url)
+      .then(function (response) {
+        setLoading(false);
+        setRepoList(response?.data);
+        console.log("ddsfsdfs", response);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log("error", error);
+      });
+  }, [id]);
+
   useEffect(() => {
     users();
-  }, []);
+  }, [users]);
 
   //search func
   useEffect(() => {
     if (!search) {
       setFinalRepo(repoList);
     }
-  }, [repoList]);
+  }, [repoList, search]);
 
   //tbl column
   const tableCol = useMemo(
@@ -46,37 +63,16 @@ const Repo = () => {
     []
   );
 
-  //api call for repos user wise
-  const users = () => {
-    setLoading(true);
-    const url = `/users/${id}/repos`;
-    api
-      .get(url)
-      .then(function (response) {
-        setLoading(false);
-        setRepoList(response?.data);
-        console.log("ddsfsdfs", response);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log("error", error);
-      });
-  };
-
   //search funnc
   const handleRepo = (event) => {
-    let newList = [];
     if (event.target.value !== "") {
       setSearch(true);
 
-      newList =
-        repoList &&
-        repoList.length > 0 &&
-        repoList.filter(({ name }) => {
-          const filterData = name.toLowerCase() || "";
-          const filterDatas = event.target.value.toLowerCase().trim();
-          return filterData.includes(filterDatas);
-        });
+      const newList = repoList.filter(({ name }) => {
+        const filterData = name.toLowerCase() || "";
+        const filterDatas = event.target.value.toLowerCase().trim();
+        return filterData.includes(filterDatas);
+      });
       setFinalRepo(newList);
     } else {
       setSearch(false);

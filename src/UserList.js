@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import SearchBar from "./Common/SearchBar";
 import { Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
@@ -17,14 +17,14 @@ const UserList = () => {
     if (!search) {
       setFinalUser(userData);
     }
-  }, [userData]);
+  }, [userData, search]);
 
   useEffect(() => {
     users();
   }, []);
 
   //api call for list of users
-  const users = async () => {
+  const users = () => {
     setLoading(true);
     const url = "/users";
     api
@@ -38,8 +38,16 @@ const UserList = () => {
         setLoading(false);
         console.log("error", error);
       });
-  };
-
+    };
+    
+    //redirect to repos
+    const handleUserRepo = useCallback(
+      (id) => {
+        history.replace(`/repo/${id}`);
+      },
+      [history]
+    );
+    
   //table Column data
   const tableCol = useMemo(
     () => [
@@ -71,13 +79,9 @@ const UserList = () => {
         ),
       },
     ],
-    []
+    [handleUserRepo]
   );
 
-  //redirect to repos
-  const handleUserRepo = (id) => {
-    history.replace(`/repo/${id}`);
-  };
 
   //search func
   const searchUser = (event) => {

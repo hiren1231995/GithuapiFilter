@@ -2,20 +2,17 @@ import React from "react";
 import { Spinner, Table } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-const TableComponent = ({ cols, data, tableClassName, isLoading }) => (
+const TableComponent = ({ cols, data, isLoading }) => (
   <div className="table-responsive">
-    {console.log("tableClassName", tableClassName)}
     <Table className="table mt-4">
       <thead>
         <tr>
           <th>id</th>
-          {console.log("cols", cols)}
           {cols &&
             cols.length > 0 &&
             cols.map((headerItem, index) => (
               <>
                 {/* {console.log("cols,data", cols, data)} */}
-                {console.log("cols -------------------", headerItem)}
                 <th className="text-capitalize" key={index}>
                   {headerItem.title}
                 </th>
@@ -34,7 +31,6 @@ const TableComponent = ({ cols, data, tableClassName, isLoading }) => (
           data &&
           data.map((item, index) => (
             <>
-              {console.log("item, index", item, index)}
               <tr className="cursor-pointer" key={index}>
                 <td>{index + 1}</td>
                 {cols &&
